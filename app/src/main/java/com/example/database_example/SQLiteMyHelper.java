@@ -9,13 +9,17 @@ public class SQLiteMyHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "products_db";
     private static final int DATABASE_VERSION = 1;
 
+    public static final String TABLE_PRODUCTS = "products";
+
+    public static final String[] COLUMS = {"id", "title", "description", "price"};
+
     public SQLiteMyHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE products (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, description TEXT NOT NULL, price REAL DEFAULT 0)");
+        sqLiteDatabase.execSQL("CREATE TABLE "+TABLE_PRODUCTS+" (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, description TEXT NOT NULL, price REAL DEFAULT 0)");
     }
 
     @Override
