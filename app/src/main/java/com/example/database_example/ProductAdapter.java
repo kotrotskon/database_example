@@ -1,6 +1,7 @@
 package com.example.database_example;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,14 @@ public class ProductAdapter extends RecyclerView.Adapter {
         ((MyViewHolder)holder).txtVw_title.setText(products.get(position).getTitle());
         ((MyViewHolder)holder).txtVw_description.setText(products.get(position).getDescription());
         ((MyViewHolder)holder).txtVw_price.setText(String.valueOf(products.get(position).getPrice()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProductActivity.class);
+                intent.putExtra("product_id", products.get(position).getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

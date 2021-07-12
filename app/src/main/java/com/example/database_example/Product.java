@@ -23,6 +23,26 @@ public class Product {
         this.price = price;
     }
 
+    public Product(int id, Context context){
+        SQLiteMyHelper myHelper = new SQLiteMyHelper(context);
+        SQLiteDatabase database = myHelper.getWritableDatabase();
+
+        String[] args = {String.valueOf(id)};
+
+//        String sql = "SELECT * FROM products WHERE id = ?";
+        Cursor cursor = database.query(SQLiteMyHelper.TABLE_PRODUCTS, SQLiteMyHelper.COLUMS, "id = ?", args, null, null, null);
+
+        cursor.moveToFirst();
+
+        this.id = cursor.getInt(0);
+        this.title = cursor.getString(1);
+        this.description = cursor.getString(2);
+        this.price = cursor.getDouble(3);
+
+        database.close();
+
+    }
+
     public int getId() {
         return id;
     }
@@ -66,7 +86,37 @@ public class Product {
         values.put(SQLiteMyHelper.COLUMS[2], this.description);
         values.put(SQLiteMyHelper.COLUMS[3], this.price);
 
+        database.close();
+
         return database.insert(SQLiteMyHelper.TABLE_PRODUCTS, null, values);
+    }
+
+    public void update(String title, String description, double price, Context context){
+        SQLiteMyHelper myHelper = new SQLiteMyHelper(context);
+        SQLiteDatabase database = myHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(SQLiteMyHelper.COLUMS[1], title);
+        values.put(SQLiteMyHelper.COLUMS[2], description);
+        values.put(SQLiteMyHelper.COLUMS[3], price);
+
+        String[] args = {String.valueOf(this.id)};
+
+//        "UPDATE products SET title = '', description='', price=0 WHERE id = ?
+        database.update(SQLiteMyHelper.TABLE_PRODUCTS, values, "id = ?", args);
+
+        database.close();
+    }
+
+    public void delete(Context context){
+        SQLiteMyHelper myHelper = new SQLiteMyHelper(context);
+        SQLiteDatabase database = myHelper.getWritableDatabase();
+
+        String[] args = {String.valueOf(this.id)};
+
+        database.delete(SQLiteMyHelper.TABLE_PRODUCTS, "id = ?", args);
+
+        database.close();
     }
 
     public static ArrayList<Product> getAllProducts(Context context){
@@ -90,6 +140,8 @@ public class Product {
 
             cursor.moveToNext();
         }
+
+        database.close();
 
         return products;
     }
